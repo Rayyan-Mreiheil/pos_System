@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreshMart | Point of Sale Practice</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="scripts/script.js" defer></script>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div>
+        <h1>FreshMart POS</h1>
+        <p>Cashier checkout practice</p>
+      </div>
+    </div>
+    <div class="clock-wrap">
+      <span class="status-dot"></span>
+      <span>Register 01</span>
+      <span class="clock-divider">|</span>
+      <time id="currentDateTime">Your JavaScript goes here</time>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <div class="workspace">
+      <section class="products-panel panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">PRODUCT CATALOG</p>
+            <h3>Choose products</h3>
+          </div>
+          <span class="count-pill" id="productCount">8 products</span>
+        </div>
+
+        <div class="product-tools">
+          <label class="search-box" for="productSearch">
+            <span aria-hidden="true">⌕</span>
+            <input type="search" id="productSearch" placeholder="Search products…" autocomplete="off">
+          </label>
+          <select id="categoryFilter" aria-label="Filter by category">
+            <option value="all">All categories</option>
+            <option value="Produce">Produce</option>
+            <option value="Bakery">Bakery</option>
+            <option value="Dairy">Dairy</option>
+            <option value="Pantry">Pantry</option>
+            <option value="Drinks">Drinks</option>
+          </select>
+        </div>
+
+        <!-- TODO: Use JavaScript to render the product cards here. -->
+        <div class="product-grid" id="productGrid">
+        </div>
+        
+        <p class="no-results hidden" id="noProductsMessage">No products match your search.</p>
+
+        <form class="custom-product-form" id="customProductForm">
+          <div class="custom-form-heading">
+            <div>
+              <h4>Add a custom product</h4>
+              <p class="muted small">For an item that is not in the catalog.</p>
+            </div>
+            <span class="custom-plus">+</span>
+          </div>
+
+          <div class="custom-fields container">
+            <div class="form-group">
+              <label for="customProductName">Product name</label>
+              <input type="text" id="customProductName" placeholder="e.g. Gift bag" maxlength="50" required>
+            </div>
+
+            <div class="form-group">
+              <label for="customPrice">Price ($)</label>
+              <input type="number" id="customProductPrice" placeholder="0.00" min="0.01" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+              <label for="customProductCategory">Category</label>
+              <select id="customProductCategory" required>
+                <option value="Produce">🍎 Produce</option>
+                <option value="Bakery">🍞 Bakery</option>
+                <option value="Dairy">🥛 Dairy</option>
+                <option value="Pantry">☕ Pantry</option>
+                <option value="Drinks">🧃 Drinks</option>
+              </select>
+            </div>
+
+            <div class="form-group button-group">
+              <button class="button button-dark" type="submit">Add product</button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <aside class="order-panel panel">
+        <div class="panel-heading order-heading">
+          <div>
+            <p class="eyebrow">CURRENT SALE</p>
+            <h3>Order summary</h3>
+          </div>
+          <span class="order-icon">▤</span>
+        </div>
+
+        <div class="order-meta">
+          <span>Transaction <strong id="transactionNumber">#FM-001</strong></span>
+          <span id="orderItemLabel">0 items</span>
+        </div>
+
+        <div class="order-list-header">
+          <span>ITEM</span><span>QTY</span><span class="align-right">TOTAL</span>
+        </div>
+        <!-- TODO: Show selected products here. Show an empty-order message when needed. -->
+        <div id="orderItems" class="order-items">
+          <div class="empty-order">
+            <div class="empty-icon">＋</div>
+            <h4>Your order is empty</h4>
+            <p>Add a product from the catalog to begin.</p>
+          </div>
+        </div>
+
+        <div class="totals">
+          <div class="total-line"><span>Subtotal</span><strong id="subtotal">$0.00</strong></div>
+          <div class="total-line discount-line hidden" id="discountLine"><span>Discount (10%)</span><strong
+              id="discountAmount">−$0.00</strong></div>
+          <div class="total-line"><span>Items in order</span><strong id="totalItems">0</strong></div>
+          <div class="grand-total">
+            <div><span>Amount to pay</span><small>USD</small></div>
+            <strong id="finalTotal">$0.00</strong>
+          </div>
+        </div>
+
+        <div class="payment-area">
+          <label for="amountPaid">Amount paid by customer ($)</label>
+          <div class="paid-input-wrap"><span>$</span><input type="number" id="amountPaid" min="0" step="0.01"
+              placeholder="0.00"></div>
+          <div class="change-row"><span>Change due</span><strong id="changeDue">$0.00</strong></div>
+        </div>
+
+        <div class="order-actions">
+          <button type="button" id="clearOrderBtn" class="button button-outline">Clear order</button>
+          <button type="button" id="completeSaleBtn" class="button button-primary">Complete sale <span>→</span></button>
+        </div>
+        <p class="secure-note"><span>✓</span> Totals update automatically as you edit the order.</p>
+      </aside>
+    </div>
+
+    <section class="history-panel panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">THIS SESSION</p>
+          <h3>Sales history</h3>
+        </div>
+        <span class="count-pill" id="salesCount">0 sales</span>
+      </div>
+      <div class="history-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>RECEIPT</th>
+              <th>DATE & TIME</th>
+              <th>ITEMS</th>
+              <th class="align-right">TOTAL</th>
+              <th>STATUS</th>
+            </tr>
+          </thead>
+          <tbody id="salesHistoryBody">
+            <tr class="history-empty">
+              <td colspan="5">Completed sales will appear here during this session.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <footer>FreshMart POS <span>•</span> JavaScript practice version.</footer>
+  </main>
+
+  <div class="modal-backdrop hidden" id="receiptModal" role="dialog" aria-modal="true" aria-labelledby="receiptTitle">
+    <div class="receipt-modal">
+      <button type="button" class="modal-close" id="closeReceiptBtn" aria-label="Close receipt">×</button>
+      <div class="receipt-brand-mark">F</div>
+      <p class="eyebrow centered">FRESHMART MARKET</p>
+      <h2 id="receiptTitle">Sale complete</h2>
+      <p class="receipt-subtitle">Thank you for shopping with us!</p>
+      <div class="receipt-meta"><span>Receipt <strong id="receiptNumber">#FM-001</strong></span><span
+          id="receiptDate"></span></div>
+      <div id="receiptItems" class="receipt-items"></div>
+      <div class="receipt-totals">
+        <div><span>Subtotal</span><strong id="receiptSubtotal">$0.00</strong></div>
+        <div id="receiptDiscountRow" class="hidden"><span>Discount</span><strong id="receiptDiscount">−$0.00</strong>
+        </div>
+        <div class="receipt-final"><span>TOTAL PAID</span><strong id="receiptTotal">$0.00</strong></div>
+        <div><span>Cash received</span><strong id="receiptPaid">$0.00</strong></div>
+        <div><span>Change</span><strong id="receiptChange">$0.00</strong></div>
+      </div>
+      <button type="button" class="button button-primary receipt-done" id="newOrderBtn">Start new order</button>
+      <button type="button" class="button button-text" id="printReceiptBtn">Print receipt</button>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toastMessage" role="status"></div>
+
+  <!-- Practice task: create your own script.js file and connect it here. -->
+  <script src="script.js"></script>
+</body>
+
+</html>
